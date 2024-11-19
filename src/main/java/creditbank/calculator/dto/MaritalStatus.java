@@ -1,0 +1,8 @@
+package creditbank.calculator.dto;
+
+public enum MaritalStatus {
+    SINGLE,
+    MARRIED,
+    DIVORCED,
+    WIDOWED
+}
