@@ -6,7 +6,7 @@
         <groupId>CreditBank</groupId>
         <artifactId>CreditBank</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>..</relativePath>
     </parent>
     <groupId>CreditBank</groupId>
     <artifactId>Calculator</artifactId>
