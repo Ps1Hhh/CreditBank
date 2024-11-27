@@ -1,0 +1,16 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: CreditBank
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    root: INFO
