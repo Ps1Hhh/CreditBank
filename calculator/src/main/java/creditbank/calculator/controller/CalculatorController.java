@@ -17,10 +17,6 @@ import java.util.List;
 /**
  * Основной контроллер Calculator API. Рассчитывает возможные и полные условия кредита.
  */
-
-/**
- * Основной контроллер Calculator API. Рассчитывает возможные и полные условия кредита.
- */
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -43,12 +39,12 @@ public class CalculatorController implements Calculate {
     public List<LoanOfferDto> calculateLoanOffers(
             LoanStatementRequestDto loanStatementRequestDto)
             throws LaterBirthdateException {
-        log.debug("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
+        log.info("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
 
         offerService.isDateLate(loanStatementRequestDto.getBirthdate());
         List<LoanOfferDto> result = offerService.getOfferList(loanStatementRequestDto);
 
-        log.debug("Ответ после расчёта возможных условий кредита: {}", result.toString());
+        log.info("Ответ после расчёта возможных условий кредита: {}", result.toString());
         return result;
     }
 
@@ -59,12 +55,12 @@ public class CalculatorController implements Calculate {
      * @return Полные условия кредита
      */
     @PostMapping("/calc")
-    public CreditDto calculateCreditOffer(ScoringDataDto scoringDataDto) throws DeniedException {
-        log.debug("Запрос на расчёт полных условий кредита: {}", scoringDataDto.toString());
+    public CreditDto calculateCreditOffer(ScoringDataDto scoringDataDto) throws ScoringDeniedException {
+        log.info("Запрос на расчёт полных условий кредита: {}", scoringDataDto.toString());
 
         CreditDto result = creditService.calculateCredit(scoringDataDto);
 
-        log.debug("Ответ после расчёта полных условий кредита: {}", result.toString());
+        log.info("Ответ после расчёта полных условий кредита: {}", result.toString());
         return result;
     }
 

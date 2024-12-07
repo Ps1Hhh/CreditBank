@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OfferService {
+public class OfferService implements IOfferService{
 
     @Value("${rate}")
     private BigDecimal rate;

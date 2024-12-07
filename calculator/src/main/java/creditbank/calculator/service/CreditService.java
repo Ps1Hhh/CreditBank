@@ -3,7 +3,7 @@ package creditbank.calculator.service;
 
 import creditbank.calculator.dto.enums.EmploymentStatus;
 import creditbank.calculator.dto.enums.Gender;
-import creditbank.calculator.exception.DeniedException;
+import creditbank.calculator.exception.ScoringDeniedException;
 import creditbank.calculator.dto.CreditDto;
 import creditbank.calculator.dto.ScoringDataDto;
 import creditbank.calculator.dto.EmploymentDto;
@@ -23,15 +23,17 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CreditService {
+public class CreditService implements ICreditService {
     @Value("${rate}")
     private BigDecimal rate;
 
-    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) throws DeniedException {
+    private final OfferService offerService = new OfferService();
+
+    public CreditDto calculateCredit(ScoringDataDto scoringDataDto) throws ScoringDeniedException {
         if (isDenied(scoringDataDto)) {
             log.error("Отказ в кредите пользователю с номером счёта {}",
                     scoringDataDto.getAccountNumber());
-            throw new DeniedException("Ошибка скоринга - отказано в кредите.", new Date());
+            throw new ScoringDeniedException("Ошибка скоринга - отказано в кредите.", new Date());
         }
         log.info("Инициирован расчёт полных условий кредита пользователя с номером счёта {}",
                 scoringDataDto.getAccountNumber());
@@ -39,20 +41,20 @@ public class CreditService {
         int term = scoringDataDto.getTerm();
         BigDecimal requestedAmount = scoringDataDto.getAmount();
         BigDecimal rate = calculateScoredRate(scoringDataDto);
-        log.debug(
+        log.trace(
                 "Расчёт условий кредита: сумма кредита {}, ставка {}, срок {} мес.",
                 requestedAmount, rate, term);
 
-        OfferService offerService = new OfferService();
+
         BigDecimal monthlyPayment = offerService.calculateMonthlyPayment(rate, requestedAmount, term);
-        log.debug("Ежемесячный платёж рассчитан: {}", monthlyPayment);
+        log.trace("Ежемесячный платёж рассчитан: {}", monthlyPayment);
 
         BigDecimal psk = offerService.calculatePsk(requestedAmount, monthlyPayment, rate);
-        log.debug("Полная стоимость кредита рассчитана: {}", psk);
+        log.trace("Полная стоимость кредита рассчитана: {}", psk);
 
         List<PaymentScheduleElementDto> schedule = createSchedule(requestedAmount, monthlyPayment,
                 rate);
-        log.debug("Расписание платежей рассчитано за период {}/{}, ",
+        log.trace("Расписание платежей рассчитано за период {}/{}, ",
                 schedule.get(0).getDate(),
                 schedule.get(term - 1).getDate());
 

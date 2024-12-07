@@ -19,7 +19,7 @@ import creditbank.calculator.dto.enums.EmploymentStatus;
 import creditbank.calculator.dto.enums.Gender;
 import creditbank.calculator.dto.enums.MaritalStatus;
 import creditbank.calculator.dto.enums.Position;
-import creditbank.calculator.exception.DeniedException;
+import creditbank.calculator.exception.ScoringDeniedException;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ public class CreditServiceTest {
     private final CreditService creditService = new CreditService();
 
     @Test
-    void calculateCredit() throws DeniedException {
+    void calculateCredit() throws ScoringDeniedException {
         BigDecimal rate = new BigDecimal("0.15");
         int term = 20;
         ReflectionTestUtils.setField(creditService, "rate", rate);
@@ -38,7 +38,7 @@ public class CreditServiceTest {
                 .build());
         scoringData.setBirthdate(LocalDate.of(2000, 1, 1));
 
-        assertThrows(DeniedException.class, () -> creditService.calculateCredit(scoringData));
+        assertThrows(ScoringDeniedException.class, () -> creditService.calculateCredit(scoringData));
 
         scoringData.setEmploymentDto(EmploymentDto.builder()
                 .employmentStatus(EmploymentStatus.EMPLOYER)
