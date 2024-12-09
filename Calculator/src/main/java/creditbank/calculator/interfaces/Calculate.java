@@ -1,8 +1,8 @@
 package creditbank.calculator.interfaces;
 
 import creditbank.calculator.dto.*;
-import creditbank.calculator.exception.DeniedException;
 import creditbank.calculator.exception.LaterBirthdateException;
+import creditbank.calculator.exception.ScoringDeniedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,5 +28,5 @@ public interface Calculate {
     )
     CreditDto calculateCreditOffer(
             @Valid @RequestBody @Parameter(description = "Данные, необходимые для скоринга", required = true)
-            ScoringDataDto scoringDataDto) throws DeniedException;
+            ScoringDataDto scoringDataDto) throws ScoringDeniedException;
 }
