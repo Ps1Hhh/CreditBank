@@ -5,15 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LaterBirthdateException extends Exception {
+public class DefaultException extends Exception {
+
+    private LocalDateTime timestamp;
+
+    private String code;
 
     private String message;
-    private Date timestamp;
+
+    private String details;
 
 }

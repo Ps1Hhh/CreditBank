@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,7 +33,7 @@ public class CreditService implements ICreditService {
         if (isDenied(scoringDataDto)) {
             log.error("Отказ в кредите пользователю с номером счёта {}",
                     scoringDataDto.getAccountNumber());
-            throw new ScoringDeniedException("Ошибка скоринга - отказано в кредите.", new Date());
+            throw new ScoringDeniedException("Ошибка скоринга - отказано в кредите.", LocalDateTime.now(), "");
         }
         log.info("Инициирован расчёт полных условий кредита пользователя с номером счёта {}",
                 scoringDataDto.getAccountNumber());

@@ -3,6 +3,7 @@ package creditbank.deal.interfaces;
 import creditbank.deal.dto.FinishRegistrationRequestDto;
 import creditbank.deal.dto.LoanOfferDto;
 import creditbank.deal.dto.LoanStatementRequestDto;
+import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +22,7 @@ public interface Deal {
     )
     List<LoanOfferDto> createLoanOffers(
             @Valid @RequestBody @Parameter(description = "Запрос на создание заявки на кредит", required = true)
-            LoanStatementRequestDto loanStatementRequestDto);
+            LoanStatementRequestDto loanStatementRequestDto) throws DefaultException;
 
     @Operation(
             summary = "Сохранение данных о выбранном кредитном предложении",
@@ -38,7 +39,7 @@ public interface Deal {
     void finishRegistration(
             @Valid @RequestBody @Parameter(description = "Запрос на расчёт выбранного кредитного предложения", required = true)
             FinishRegistrationRequestDto finishRegistrationRequestDto,
-            String statementId) throws ScoringDeniedException;
+            String statementId) throws ScoringDeniedException, DefaultException;
 
 
 }

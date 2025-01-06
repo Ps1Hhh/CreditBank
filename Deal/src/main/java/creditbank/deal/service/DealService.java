@@ -4,6 +4,7 @@ import creditbank.deal.dto.*;
 import creditbank.deal.dto.enums.ApplicationStatus;
 import creditbank.deal.dto.enums.ChangeType;
 import creditbank.deal.dto.enums.CreditStatus;
+import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 import creditbank.deal.interfaces.CalculatorClient;
 import creditbank.deal.mapper.ClientMapperImpl;
@@ -37,7 +38,7 @@ public class DealService implements IDealService{
     private final ScoringDataMapperImpl scoringDataMapper;
     private final CreditMapperImpl creditMapper;
 
-    public List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest) {
+    public List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest) throws DefaultException {
 
         List<LoanOfferDto> offers = calculatorClient.getLoanOffers(statementRequest);
         log.debug("Инициировано создание заявки на кредит: {}", statementRequest);
@@ -79,7 +80,7 @@ public class DealService implements IDealService{
     }
 
     public void createCredit(FinishRegistrationRequestDto finishRequest, String statementId)
-            throws ScoringDeniedException {
+            throws ScoringDeniedException, DefaultException {
 
         Statement statement = statementRepository.getByStatementId(UUID.fromString(statementId));
         Client updatedClient = statement.getClient();

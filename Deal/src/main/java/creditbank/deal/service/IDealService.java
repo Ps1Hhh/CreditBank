@@ -3,6 +3,7 @@ package creditbank.deal.service;
 import creditbank.deal.dto.FinishRegistrationRequestDto;
 import creditbank.deal.dto.LoanOfferDto;
 import creditbank.deal.dto.LoanStatementRequestDto;
+import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface IDealService {
      * @param statementRequest запрос с данными клиента для расчёта предложений кредита.
      * @return список предложений кредита (от худшего к лучшему).
      */
-    List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest);
+    List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest) throws DefaultException;
 
     /**
      * Обрабатывает выбор кредитного предложения клиентом и обновляет статус заявки.
@@ -31,5 +32,5 @@ public interface IDealService {
      * @param statementId идентификатор заявки.
      * @throws ScoringDeniedException если скоринг отклонён.
      */
-    void createCredit(FinishRegistrationRequestDto finishRequest, String statementId) throws ScoringDeniedException;
+    void createCredit(FinishRegistrationRequestDto finishRequest, String statementId) throws ScoringDeniedException, DefaultException;
 }

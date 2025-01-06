@@ -3,6 +3,7 @@ package creditbank.deal.controller;
 import creditbank.deal.dto.FinishRegistrationRequestDto;
 import creditbank.deal.dto.LoanOfferDto;
 import creditbank.deal.dto.LoanStatementRequestDto;
+import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 import creditbank.deal.interfaces.Deal;
 import creditbank.deal.service.DealService;
@@ -27,13 +28,16 @@ public class DealController implements Deal {
     private final DealService dealService;
 
     @PostMapping("/statement")
-    public List<LoanOfferDto> createLoanOffers(LoanStatementRequestDto statementRequest) {
+    public List<LoanOfferDto> createLoanOffers(LoanStatementRequestDto statementRequest)
+            throws DefaultException {
         log.debug("Запрос на обработку кредитной заявки: {}", statementRequest.toString());
 
         List<LoanOfferDto> result = dealService.createStatement(statementRequest);
 
         log.debug("Ответ после обработки кредитной заявки: {}", result.toString());
         return result;
+
+
     }
 
     @PostMapping("/offer/select")
@@ -45,7 +49,7 @@ public class DealController implements Deal {
 
     @PostMapping("/calculate/{statementId}")
     public void finishRegistration(FinishRegistrationRequestDto finishRequest,
-                                   @PathVariable String statementId) throws ScoringDeniedException {
+                                   @PathVariable String statementId) throws ScoringDeniedException, DefaultException {
         log.debug("Запрос на расчёт кредитного предложения по заявке {}: {}",
                 statementId, finishRequest.toString());
 

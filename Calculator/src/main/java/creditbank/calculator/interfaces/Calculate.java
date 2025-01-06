@@ -1,7 +1,6 @@
 package creditbank.calculator.interfaces;
 
 import creditbank.calculator.dto.*;
-import creditbank.calculator.exception.LaterBirthdateException;
 import creditbank.calculator.exception.ScoringDeniedException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,8 +18,7 @@ public interface Calculate {
     )
     List<LoanOfferDto> calculateLoanOffers(
             @Valid @RequestBody @Parameter(description = "Заявка на кредит", required = true)
-            LoanStatementRequestDto loanStatementRequestDto)
-            throws LaterBirthdateException;
+            LoanStatementRequestDto loanStatementRequestDto);
 
     @Operation(
             summary = "Расчёт полных условий кредита",

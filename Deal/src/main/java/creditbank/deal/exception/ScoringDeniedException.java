@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ import java.util.Date;
 public class ScoringDeniedException extends Exception {
 
     private String message;
-    private Date timestamp;
+    private LocalDateTime timestamp;
+    private String details;
 
 }

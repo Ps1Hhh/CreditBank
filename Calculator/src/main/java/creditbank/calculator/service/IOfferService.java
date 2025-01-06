@@ -2,21 +2,12 @@ package creditbank.calculator.service;
 
 import creditbank.calculator.dto.LoanOfferDto;
 import creditbank.calculator.dto.LoanStatementRequestDto;
-import creditbank.calculator.exception.LaterBirthdateException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface IOfferService {
-
-    /**
-     * Проверяет совершеннолетие пользователя.
-     *
-     * @param date Дата рождения пользователя
-     * @throws LaterBirthdateException Ошибка - пользователь несовершеннолетний.
-     */
-    void isDateLate(LocalDate date) throws LaterBirthdateException;
 
     /**
      * Рассчитывает список из 4-х возможных предложений по кредиту.

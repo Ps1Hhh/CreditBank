@@ -6,6 +6,7 @@ import creditbank.deal.dto.LoanOfferDto;
 import creditbank.deal.dto.LoanStatementRequestDto;
 import creditbank.deal.dto.ScoringDataDto;
 import creditbank.deal.exception.CustomErrorDecoder;
+import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,8 @@ import java.util.List;
 public interface CalculatorClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/offers", consumes = "application/json")
-    List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto);
+    List<LoanOfferDto> getLoanOffers(LoanStatementRequestDto loanStatementRequestDto) throws DefaultException;
 
     @RequestMapping(method = RequestMethod.POST, value = "/calc", consumes = "application/json")
-    CreditDto getCredit(ScoringDataDto scoringData) throws ScoringDeniedException;
+    CreditDto getCredit(ScoringDataDto scoringData) throws ScoringDeniedException, DefaultException;
 }
