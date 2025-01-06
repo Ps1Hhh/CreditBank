@@ -1,4 +1,4 @@
-package creditbank.deal.exception;
+package creditbank.calculator.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

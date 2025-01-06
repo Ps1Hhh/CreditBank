@@ -7,9 +7,6 @@ import lombok.Setter;
 
 import java.util.Date;
 
-/**
- * Возникает в случае, если пользователь несовершеннолетний.
- */
 @Getter
 @Setter
 @AllArgsConstructor

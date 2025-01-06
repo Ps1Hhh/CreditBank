@@ -7,9 +7,6 @@ import lombok.Setter;
 
 import java.util.Date;
 
-/**
- * Возникает в случае отказа после скоринга.
- */
 @Getter
 @Setter
 @AllArgsConstructor

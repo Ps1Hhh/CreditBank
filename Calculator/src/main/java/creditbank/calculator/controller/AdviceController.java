@@ -1,37 +1,45 @@
 package creditbank.calculator.controller;
 
-import creditbank.calculator.exception.*;
+import creditbank.calculator.exception.ErrorResponse;
+import creditbank.calculator.exception.LaterBirthdateException;
+import creditbank.calculator.exception.ScoringDeniedException;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Глобальный контроллер для перехвата ошибок.
- */
 @RestControllerAdvice
 @Slf4j
 public class AdviceController {
 
     @ExceptionHandler(LaterBirthdateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage onLaterBirthdateException(LaterBirthdateException e) {
+    public ResponseEntity<ErrorResponse> onLaterBirthdateException(LaterBirthdateException e,
+                                                                   WebRequest request) {
         String message = e.getMessage();
         log.error(message);
-        return new ErrorMessage(message);
+        return new ResponseEntity<>(new ErrorResponse(
+                e.getTimestamp(),
+                "minor_user",
+                message,
+                request.getDescription(false)),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ScoringDeniedException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage onDeniedException(ScoringDeniedException e) {
-        return new ErrorMessage(e.getMessage());
+    public ResponseEntity<ErrorResponse> onDeniedException(ScoringDeniedException e, WebRequest request) {
+        return new ResponseEntity<>(new ErrorResponse(
+                e.getTimestamp(),
+                "cc_denied",
+                e.getMessage(),
+                request.getDescription(false)),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
