@@ -9,12 +9,12 @@ spring:
     jpa:
       hibernate:
         ddl-auto: update
-    cloud:
-      openfeign:
-        client:
-          config:
-            calculator:
-              url: http://localhost:8088/calculator
+  cloud:
+    openfeign:
+      client:
+        config:
+          calculator:
+            url: http://localhost:8088/calculator
   jackson:
     serialization:
       fail-on-empty-beans: false
