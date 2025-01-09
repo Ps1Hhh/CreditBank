@@ -9,10 +9,7 @@ import creditbank.deal.interfaces.Deal;
 import creditbank.deal.service.DealService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +25,7 @@ public class DealController implements Deal {
     private final DealService dealService;
 
     @PostMapping("/statement")
-    public List<LoanOfferDto> createLoanOffers(LoanStatementRequestDto statementRequest)
+    public List<LoanOfferDto> createLoanOffers(@RequestBody LoanStatementRequestDto statementRequest)
             throws DefaultException {
         log.debug("Запрос на обработку кредитной заявки: {}", statementRequest.toString());
 
@@ -41,14 +38,14 @@ public class DealController implements Deal {
     }
 
     @PostMapping("/offer/select")
-    public void selectOffer(LoanOfferDto loanOfferDto) {
+    public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
         log.debug("Выбор кредитного предложения: {}", loanOfferDto.toString());
 
         dealService.selectOffer(loanOfferDto);
     }
 
     @PostMapping("/calculate/{statementId}")
-    public void finishRegistration(FinishRegistrationRequestDto finishRequest,
+    public void finishRegistration(@RequestBody FinishRegistrationRequestDto finishRequest,
                                    @PathVariable String statementId) throws ScoringDeniedException, DefaultException {
         log.debug("Запрос на расчёт кредитного предложения по заявке {}: {}",
                 statementId, finishRequest.toString());
