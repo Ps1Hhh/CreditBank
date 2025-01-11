@@ -70,7 +70,6 @@ public class DealService implements IDealService{
 
     public void selectOffer(LoanOfferDto appliedOffer) {
         Statement statement = statementRepository.getByStatementId(appliedOffer.getStatementId());
-
         statement.setStatusAndHistoryEntry(ApplicationStatus.APPROVED, ChangeType.MANUAL);
         statement.setAppliedOffer(appliedOffer);
 
