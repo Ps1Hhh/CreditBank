@@ -7,8 +7,6 @@ spring:
     default-property-inclusion: non_null
 server:
   port: 8088
-  servlet:
-    context-path: /api
 
 logging:
   level:

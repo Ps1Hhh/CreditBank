@@ -1,4 +1,4 @@
-package creditbank.calculator.exception;
+package creditbank.deal.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,17 +7,18 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * Возникает в случае отказа после скоринга.
- */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScoringDeniedException extends Exception {
+public class DefaultException extends Exception {
+
+    private LocalDateTime timestamp;
+
+    private String code;
 
     private String message;
-    private LocalDateTime timestamp;
+
     private String details;
 
 }

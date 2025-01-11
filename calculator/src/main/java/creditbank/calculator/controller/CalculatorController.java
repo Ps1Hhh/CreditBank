@@ -33,15 +33,12 @@ public class CalculatorController implements Calculate {
      *
      * @param loanStatementRequestDto Заявка на кредит
      * @return Список 4-х возможных условий кредита
-     * @throws LaterBirthdateException Ошибка - несовершеннолетний пользователь
      */
     @PostMapping("/offers")
     public List<LoanOfferDto> calculateLoanOffers(
-            LoanStatementRequestDto loanStatementRequestDto)
-            throws LaterBirthdateException {
+            LoanStatementRequestDto loanStatementRequestDto) {
         log.info("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
 
-        offerService.isDateLate(loanStatementRequestDto.getBirthdate());
         List<LoanOfferDto> result = offerService.getOfferList(loanStatementRequestDto);
 
         log.info("Ответ после расчёта возможных условий кредита: {}", result.toString());
