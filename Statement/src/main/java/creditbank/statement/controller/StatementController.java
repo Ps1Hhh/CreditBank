@@ -40,11 +40,11 @@ public class StatementController implements Statement {
     public List<LoanOfferDto> calculateLoanOffers(@RequestBody
             LoanStatementRequestDto loanStatementRequestDto)
             throws LaterBirthdateException, DefaultException {
-        log.debug("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
+        log.info("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
 
         List<LoanOfferDto> offers = statementService.getOffers(loanStatementRequestDto);
 
-        log.debug("Ответ после расчёта возможных условий кредита: {}", offers.toString());
+        log.info("Ответ после расчёта возможных условий кредита: {}", offers.toString());
         return offers;
     }
 
@@ -55,7 +55,7 @@ public class StatementController implements Statement {
      */
     @PostMapping("/offer")
     public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) throws DefaultException {
-        log.debug("Выбор кредитного предложения: {}", loanOfferDto.toString());
+        log.info("Выбор кредитного предложения: {}", loanOfferDto.toString());
 
         statementService.selectOffer(loanOfferDto);
     }
