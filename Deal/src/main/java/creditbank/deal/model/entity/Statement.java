@@ -7,20 +7,25 @@ import creditbank.deal.model.attribute.StatementStatusHistoryDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@ToString
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Statement {
 
@@ -65,4 +70,13 @@ public class Statement {
                 .build();
         statusHistory.add(statusHistoryEntry);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Statement statement = (Statement) o;
+        return Objects.equals(statementId, statement.statementId) && Objects.equals(client, statement.client) && Objects.equals(credit, statement.credit) && status == statement.status && Objects.equals(creationDate, statement.creationDate) && Objects.equals(appliedOffer, statement.appliedOffer) && Objects.equals(signDate, statement.signDate) && Objects.equals(sesCode, statement.sesCode) && Objects.equals(statusHistory, statement.statusHistory);
+    }
+
 }
