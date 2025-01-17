@@ -8,7 +8,7 @@ spring:
     driverClassName: org.postgresql.Driver
     jpa:
       hibernate:
-        ddl-auto: validate
+        ddl-auto: update
   cloud:
     openfeign:
       client:
@@ -21,6 +21,9 @@ spring:
     default-property-inclusion: non_null
 server:
   port: 8089
+  servlet:
+    context-path: /DealAPI
+
 logging:
   level:
     root: INFO
