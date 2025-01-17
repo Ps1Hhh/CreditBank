@@ -41,7 +41,7 @@ public class DealService implements IDealService{
     public List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest) throws DefaultException {
 
         List<LoanOfferDto> offers = calculatorClient.getLoanOffers(statementRequest);
-        log.debug("Инициировано создание заявки на кредит: {}", statementRequest);
+        log.info("Инициировано создание заявки на кредит: {}", statementRequest);
 
         Client client = clientMapper.dtoToClient(statementRequest);
         Passport passport = Passport.builder()
@@ -50,7 +50,7 @@ public class DealService implements IDealService{
                 .build();
         client.setPassport(passport);
         Client savedClient = clientRepository.save(client);
-        log.debug("Сохранена сущность клиента: {}", savedClient);
+        log.info("Сохранена сущность клиента: {}", savedClient);
 
         Statement statement = Statement.builder()
                 .client(savedClient)
@@ -58,7 +58,7 @@ public class DealService implements IDealService{
                 .build();
         statement.setStatusAndHistoryEntry(ApplicationStatus.PREAPPROVAL, ChangeType.AUTOMATIC);
         Statement savedStatement = statementRepository.save(statement);
-        log.debug("Сохранена сущность заявки: {}", savedStatement);
+        log.info("Сохранена сущность заявки: {}", savedStatement);
 
         UUID statementId = savedStatement.getStatementId();
         for (LoanOfferDto offer : offers) {
@@ -74,7 +74,7 @@ public class DealService implements IDealService{
         statement.setAppliedOffer(appliedOffer);
 
         statementRepository.save(statement);
-        log.debug("Сохранено выбранное кредитное предложение: {}", statement);
+        log.info("Сохранено выбранное кредитное предложение: {}", statement);
 
     }
 
@@ -85,7 +85,7 @@ public class DealService implements IDealService{
         Client updatedClient = statement.getClient();
         clientMapper.updateAtFinish(finishRequest, updatedClient);
         clientRepository.save(updatedClient);
-        log.debug("Обновлены данные о клиенте: {}", updatedClient);
+        log.info("Обновлены данные о клиенте: {}", updatedClient);
 
         ScoringDataDto scoringData = scoringDataMapper.clientDataToDto(updatedClient,
                 updatedClient.getPassport(), statement.getAppliedOffer());
@@ -95,12 +95,12 @@ public class DealService implements IDealService{
             Credit credit = creditMapper.dtoToCredit(creditDto);
             credit.setCreditStatus(CreditStatus.CALCULATED);
             Credit savedCredit = creditRepository.save(credit);
-            log.debug("Сохранена сущность кредита: {}", savedCredit);
+            log.info("Сохранена сущность кредита: {}", savedCredit);
 
             statement.setCredit(savedCredit);
             statement.setStatusAndHistoryEntry(ApplicationStatus.CC_APPROVED, ChangeType.AUTOMATIC);
             statementRepository.save(statement);
-            log.debug("Вычислена и сохранена заявка: {}", statement);
+            log.info("Вычислена и сохранена заявка: {}", statement);
         }
         catch(ScoringDeniedException deniedException) {
             statement.setStatusAndHistoryEntry(ApplicationStatus.CC_DENIED, ChangeType.AUTOMATIC);

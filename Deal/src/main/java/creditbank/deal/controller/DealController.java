@@ -31,11 +31,11 @@ public class DealController implements Deal {
     @PostMapping("/statement")
     public List<LoanOfferDto> createLoanOffers(@RequestBody LoanStatementRequestDto statementRequest)
             throws DefaultException {
-        log.debug("Запрос на обработку кредитной заявки: {}", statementRequest.toString());
+        log.info("Запрос на обработку кредитной заявки: {}", statementRequest.toString());
 
         List<LoanOfferDto> result = dealService.createStatement(statementRequest);
 
-        log.debug("Ответ после обработки кредитной заявки: {}", result.toString());
+        log.info("Ответ после обработки кредитной заявки: {}", result.toString());
         return result;
 
 
@@ -43,7 +43,7 @@ public class DealController implements Deal {
 
     @PostMapping("/offer/select")
     public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
-        log.debug("Выбор кредитного предложения: {}", loanOfferDto.toString());
+        log.info("Выбор кредитного предложения: {}", loanOfferDto.toString());
 
         dealService.selectOffer(loanOfferDto);
     }
@@ -51,7 +51,7 @@ public class DealController implements Deal {
     @PostMapping("/calculate/{statementId}")
     public void finishRegistration(@RequestBody FinishRegistrationRequestDto finishRequest,
                                    @PathVariable String statementId) throws ScoringDeniedException, DefaultException {
-        log.debug("Запрос на расчёт кредитного предложения по заявке {}: {}",
+        log.info("Запрос на расчёт кредитного предложения по заявке {}: {}",
                 statementId, finishRequest.toString());
 
         dealService.createCredit(finishRequest, statementId);
