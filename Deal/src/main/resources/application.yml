@@ -8,7 +8,10 @@ spring:
     driverClassName: org.postgresql.Driver
     jpa:
       hibernate:
-        ddl-auto: update
+        ddl-auto: validate
+    liquibase:
+      enabled: true
+      change-log: classpath:/db/changelog/db.changelog-master.xml
   cloud:
     openfeign:
       client:
@@ -21,9 +24,6 @@ spring:
     default-property-inclusion: non_null
 server:
   port: 8089
-  servlet:
-    context-path: /DealAPI
-
 logging:
   level:
     root: INFO
