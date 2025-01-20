@@ -1,11 +1,11 @@
 spring:
   application:
-    name: Deal
+    name: Statement
   cloud:
     openfeign:
       client:
         config:
-          calculator:
+          deal:
             url: http://localhost:8089/deal
   jackson:
     serialization:
