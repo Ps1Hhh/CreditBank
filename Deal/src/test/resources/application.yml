@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: Deal
+  datasource:
+    url: jdbc:postgresql://localhost:5432/calculator_db
+    username: admin
+    password: pass
+    driverClassName: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: update
+  cloud:
+    openfeign:
+      client:
+        config:
+          calculator:
+            url: http://localhost:8088/calculator
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    default-property-inclusion: non_null
+server:
+  port: 8089
+  servlet:
+    context-path: /DealAPI
+
+logging:
+  level:
+    root: INFO
