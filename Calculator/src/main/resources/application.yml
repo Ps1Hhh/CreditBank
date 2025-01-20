@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Calculator
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+    default-property-inclusion: non_null
+server:
+  port: 8088
+
+logging:
+  level:
+    root: INFO
