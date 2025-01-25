@@ -1,8 +1,16 @@
 package creditbank.deal.dto.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Position {
-    ORDINARY,
-    LOWER_MANAGER,
-    MIDDLE_MANAGER,
-    TOP_MANAGER
+
+    ORDINARY("Рядовой сотрудник"),
+    LOWER_MANAGER("Менеджер нижнего звена"),
+    MIDDLE_MANAGER("Менеджер среднего звена"),
+    TOP_MANAGER("Топ-менеджер");
+
+    private final String docName;
 }
