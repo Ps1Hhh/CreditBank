@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Основной контроллер Deal API. Рассчитывает возможные и полные условия кредита.
@@ -56,6 +55,7 @@ public class DealController implements Deal {
         log.info("Ответ после обработки кредитной заявки: {}", result.toString());
         return result;
 
+
     }
 
     @PostMapping("/offer/select")
@@ -74,31 +74,22 @@ public class DealController implements Deal {
         dealService.createCredit(finishRequest, statementId);
     }
 
-    @GetMapping("/document/{statementId}/send")
+    @PostMapping("/document/{statementId}/send")
     public void sendDocuments(@PathVariable String statementId) {
-        log.debug("Запрос на формирование и отправку документов по заявке {}", statementId);
+        log.info("Запрос на формирование и отправку документов по заявке {}", statementId);
 
         emailService.sendDocuments(sendDocumentsTopic, statementId, ApplicationStatus.PREPARE_DOCUMENTS);
     }
 
-//    @PutMapping("/document/{statementId}/status")
-//    public void changeStatusOnDocumentsCreated(@PathVariable String statementId) {
-//        log.debug("Изменение статуса заявки {} на 'DOCUMENTS_CREATED'", statementId);
-//
-//        emailService.changeStatementStatus(
-//                statementId,
-//                ApplicationStatus.DOCUMENTS_CREATED, ChangeType.AUTOMATIC);
-//    }
-
-    @GetMapping("/document/{statementId}/sign")
+    @PostMapping("/document/{statementId}/sign")
     public void signDocuments(@RequestParam("decision") Boolean isAccepted,
                               @PathVariable String statementId) {
-        log.debug("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
+        log.info("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
 
         if (isAccepted) {
             emailService.sendCode(sendSesTopic, statementId);
         } else {
-            log.debug("Изменение статуса заявки {} на 'CLIENT_DENIED'", statementId);
+            log.info("Изменение статуса заявки {} на 'CLIENT_DENIED'", statementId);
 
             emailService.changeStatementStatus(
                     statementId,
@@ -106,9 +97,9 @@ public class DealController implements Deal {
         }
     }
 
-    @GetMapping("/document/{statementId}/code")
+    @PostMapping("/document/{statementId}/code")
     public void sendCodeVerification(@RequestParam("code") String code, @PathVariable String statementId) {
-        log.debug("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
+        log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
 
         emailService.sendCreditIssuedMessage(creditIssuedTopic, statementId, code);
     }

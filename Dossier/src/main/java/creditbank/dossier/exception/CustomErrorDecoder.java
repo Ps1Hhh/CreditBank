@@ -13,27 +13,23 @@ public class CustomErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
 
-        @Override
-        public Exception decode(String methodKey, Response response) {
+        try (InputStream bodyIs = response.body()
+                .asInputStream()) {
 
-            try (InputStream bodyIs = response.body()
-                    .asInputStream()) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
 
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.registerModule(new JavaTimeModule());
+            ErrorResponse errorResponse = mapper.readValue(bodyIs, ErrorResponse.class);
 
-                ErrorResponse errorResponse = mapper.readValue(bodyIs, ErrorResponse.class);
+            return new DefaultException(
+                    errorResponse.getTimestamp(),
+                    errorResponse.getCode(),
+                    errorResponse.getMessage(),
+                    errorResponse.getDetails()
+            );
 
-                return new DefaultException(
-                        errorResponse.getTimestamp(),
-                        errorResponse.getCode(),
-                        errorResponse.getMessage(),
-                        errorResponse.getDetails()
-                );
-
-            } catch (IOException e) {
-                return new IOException(e.getMessage());
-            }
+        } catch (IOException e) {
+            return new IOException(e.getMessage());
         }
-
+    }
 }

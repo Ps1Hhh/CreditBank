@@ -12,10 +12,7 @@ import java.time.LocalDateTime;
 public class ErrorResponse {
 
     private LocalDateTime timestamp;
-
     private String code;
-
     private String message;
-
     private String details;
 }

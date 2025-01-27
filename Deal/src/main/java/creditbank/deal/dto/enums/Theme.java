@@ -24,5 +24,4 @@ public enum Theme {
         }
         return null;
     }
-
 }

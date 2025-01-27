@@ -1,12 +1,28 @@
 spring:
   application:
-    name: Calculator
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-    default-property-inclusion: non_null
+    name: Dossier
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: YOUR-EMAIL
+    password: pass
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+#        ssl:
+#          protocols: TLSv1.2
+#          trust: smtp.gmail.com
+  kafka:
+      bootstrap-servers: localhost:9092
+  cloud:
+    openfeign:
+      client:
+        config:
+          deal:
+            url: http://localhost:8089/deal
 server:
-  port: 8088
+  port: 8091
 
 logging:
   level:

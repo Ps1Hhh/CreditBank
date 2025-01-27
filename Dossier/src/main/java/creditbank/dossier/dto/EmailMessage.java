@@ -16,13 +16,9 @@ import java.util.UUID;
 public class EmailMessage {
 
     private String address;
-
     private Theme theme;
-
     private UUID statementId;
-
     private String code;
-
     private List<String> documents;
 
 }

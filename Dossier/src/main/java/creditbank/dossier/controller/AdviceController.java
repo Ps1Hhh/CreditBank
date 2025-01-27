@@ -1,18 +1,16 @@
 package creditbank.dossier.controller;
 
-import creditbank.deal.exception.DefaultException;
-import creditbank.deal.exception.ErrorResponse;
-import creditbank.deal.exception.ScoringDeniedException;
+
+import creditbank.dossier.exception.DefaultException;
+import creditbank.dossier.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 
 /**

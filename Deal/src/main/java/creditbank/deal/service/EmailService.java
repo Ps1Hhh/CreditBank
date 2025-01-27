@@ -48,10 +48,10 @@ public class EmailService implements IEmailService {
                 .statementId(statement.getStatementId())
                 .documents(documents)
                 .build();
-        log.debug("Сформирован текст документов по заявке {}", statementId);
+        log.info("Сформирован текст документов по заявке {}", statementId);
 
         fileKafkaTemplate.send(topic, message);
-        log.debug("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
+        log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
                 topic, message.toString());
     }
 
@@ -64,7 +64,7 @@ public class EmailService implements IEmailService {
 
         statement.setSesCode(code);
         statementRepository.save(statement);
-        log.debug("Сгенерирован код подтверждения {} для заявки {}.", code, statementId);
+        log.info("Сгенерирован код подтверждения {} для заявки {}.", code, statementId);
 
         EmailMessage message = EmailMessage.builder()
                 .address(statement.getClient().getEmail())
@@ -74,7 +74,7 @@ public class EmailService implements IEmailService {
                 .build();
 
         emailKafkaTemplate.send(topic, message);
-        log.debug("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
+        log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
                 topic, message.toString());
     }
 
@@ -93,7 +93,7 @@ public class EmailService implements IEmailService {
 
             creditRepository.save(credit);
 
-            log.debug("Полученный код подтверждения {} совпал с отправленным. Кредит по заявке {} выдан.",
+            log.info("Полученный код подтверждения {} совпал с отправленным. Кредит по заявке {} выдан.",
                     code, statementId);
 
             EmailMessage message = EmailMessage.builder()
@@ -103,7 +103,7 @@ public class EmailService implements IEmailService {
                     .build();
 
             emailKafkaTemplate.send(topic, message);
-            log.debug("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
+            log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
                     topic, message.toString());
         }
     }

@@ -108,7 +108,7 @@ public class EmailService {
             FileWriter writer = new FileWriter(file);
             writer.write(message.getDocuments().get(i));
             writer.close();
-            log.debug("Создан временный файл документа {} по заявке {}", file.getName(), statementId);
+            log.info("Создан временный файл документа {} по заявке {}", file.getName(), statementId);
 
             FileSystemResource attachment = new FileSystemResource(file);
             helper.addAttachment(file.getName(), attachment);
@@ -124,7 +124,7 @@ public class EmailService {
 
         for(File file : filesToDelete) {
             file.delete();
-            log.debug("Удален временный файл документа {} по заявке {}", file.getName(), statementId);
+            log.info("Удален временный файл документа {} по заявке {}", file.getName(), statementId);
         }
     }
 
@@ -162,13 +162,13 @@ public class EmailService {
     }
 
     private void logSimpleMailMessage(SimpleMailMessage message) {
-        log.debug("Отправлено письмо по адресу {}. Тема: {}",
+        log.info("Отправлено письмо по адресу {}. Тема: {}",
                 message.getTo(),
                 message.getSubject());
     }
 
     private void logMimeMessage(MimeMessage message) throws MessagingException {
-        log.debug("Отправлено письмо по адресу {}. Тема: {}",
+        log.info("Отправлено письмо по адресу {}. Тема: {}",
                 message.getRecipients(MimeMessage.RecipientType.TO)[0].toString(),
                 message.getSubject());
     }

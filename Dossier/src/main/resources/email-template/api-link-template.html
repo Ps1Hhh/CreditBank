@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отправка документов</title>
+</head>
+<body>
+<p th:text="${text}"></p>
+<form th:action="${link}" method="POST" style="display: inline;">
+    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; cursor: pointer;">
+        <span th:text="${link_text}">Сформировать документы</span>
+    </button>
+</form>
+</body>
+</html>
