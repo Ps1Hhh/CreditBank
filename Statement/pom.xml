@@ -2,11 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <groupId>CreditBank</groupId>
+        <artifactId>CreditBank</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
-    <groupId>CreditBank</groupId>
+
+    <groupId>creditbank</groupId>
     <artifactId>Statement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Statement</name>

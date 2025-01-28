@@ -1,18 +1,16 @@
 spring:
   application:
-    name: Statement
+    name: Gateway
   cloud:
     openfeign:
       client:
         config:
           deal:
             url: http://localhost:8089/deal
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-    default-property-inclusion: non_null
+          statement:
+            url: http://localhost:8090/statement
 server:
-  port: 8090
+  port: 8087
 
 logging:
   level:
