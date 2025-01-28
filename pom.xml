@@ -30,6 +30,8 @@
         <module>Statement</module>
 
 		<module>Dossier</module>
+
+		<module>Gateway</module>
     </modules>
 
 	<dependencies>
