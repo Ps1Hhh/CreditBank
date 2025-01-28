@@ -35,17 +35,17 @@ public class GatewayController implements Gateway {
     @PostMapping("/statement")
     public List<LoanOfferDto> calculateLoanOffers(LoanStatementRequestDto loanStatementRequestDto)
             throws DefaultException {
-        log.debug("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
+        log.info("Запрос на расчёт возможных условий кредита: {}", loanStatementRequestDto.toString());
 
         List<LoanOfferDto> offers = gatewayService.calculateLoanOffers(loanStatementRequestDto);
 
-        log.debug("Ответ после расчёта возможных условий кредита: {}", offers.toString());
+        log.info("Ответ после расчёта возможных условий кредита: {}", offers.toString());
         return offers;
     }
 
     @PostMapping("/statement/select")
     public void selectOffer(LoanOfferDto loanOfferDto) throws DefaultException {
-        log.debug("Выбор кредитного предложения: {}", loanOfferDto.toString());
+        log.info("Выбор кредитного предложения: {}", loanOfferDto.toString());
 
         gatewayService.selectOffer(loanOfferDto);
     }
@@ -53,7 +53,7 @@ public class GatewayController implements Gateway {
     @PostMapping("/statement/registration/{statementId}")
     public void finishRegistration(FinishRegistrationRequestDto finishRequest,
                                    @PathVariable String statementId) throws DefaultException {
-        log.debug("Запрос на расчёт кредитного предложения по заявке {}: {}",
+        log.info("Запрос на расчёт кредитного предложения по заявке {}: {}",
                 statementId, finishRequest.toString());
 
         gatewayService.finishRegistration(finishRequest, statementId);
@@ -61,7 +61,7 @@ public class GatewayController implements Gateway {
 
     @PostMapping("/document/{statementId}")
     public void sendDocuments(@PathVariable String statementId) throws DefaultException {
-        log.debug("Запрос на формирование и отправку документов по заявке {}", statementId);
+        log.info("Запрос на формирование и отправку документов по заявке {}", statementId);
 
         gatewayService.sendDocuments(statementId);
     }
@@ -69,7 +69,7 @@ public class GatewayController implements Gateway {
     @PostMapping("/document/{statementId}/sign")
     public void signDocuments(@RequestParam("decision") Boolean isAccepted,
                               @PathVariable String statementId) throws DefaultException {
-        log.debug("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
+        log.info("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
 
         gatewayService.signDocuments(isAccepted, statementId);
     }
@@ -77,21 +77,21 @@ public class GatewayController implements Gateway {
     @PostMapping("/document/{statementId}/sign/code")
     public void sendCodeVerification(@RequestParam("code") String code,
                                      @PathVariable String statementId) throws DefaultException {
-        log.debug("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
+        log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
 
         gatewayService.sendCodeVerification(code, statementId);
     }
 
     @GetMapping("/admin/statement/{statementId}")
     public Statement getStatementById(@PathVariable String statementId) throws DefaultException {
-        log.debug("Запрос администратора на получение заявки {}", statementId);
+        log.info("Запрос администратора на получение заявки {}", statementId);
 
         return gatewayService.getStatementById(statementId);
     }
 
     @GetMapping("/admin/statement")
     public List<Statement> getAllStatements() throws DefaultException {
-        log.debug("Запрос администратора на получение всех заявок");
+        log.info("Запрос администратора на получение всех заявок");
 
         return gatewayService.getAllStatements();
     }

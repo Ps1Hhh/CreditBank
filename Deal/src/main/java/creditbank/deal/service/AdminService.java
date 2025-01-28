@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminService implements IAdminService {
 
     private final StatementRepository statementRepository;
 

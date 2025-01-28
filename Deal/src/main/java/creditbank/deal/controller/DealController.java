@@ -109,14 +109,14 @@ public class DealController implements Deal {
 
     @GetMapping("/admin/statement/{statementId}")
     public Statement getStatementById(@PathVariable String statementId) {
-        log.debug("Запрос администратора на получение заявки {}", statementId);
+        log.info("Запрос администратора на получение заявки {}", statementId);
 
         return adminService.getStatementById(statementId);
     }
 
     @GetMapping("/admin/statement")
     public List<Statement> getAllStatements() {
-        log.debug("Запрос администратора на получение всех заявок");
+        log.info("Запрос администратора на получение всех заявок");
 
         return adminService.getAllStatements();
     }
