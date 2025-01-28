@@ -11,13 +11,13 @@ spring:
           predicates:
             - Path=/deal/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=0
         - id: statement-service
           uri: http://localhost:8090
           predicates:
             - Path=/statement/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=0
     openfeign:
       client:
         config:
