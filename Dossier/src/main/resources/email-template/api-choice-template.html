@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>CreditBank</title>
+</head>
+<body>
+<p>Все условия кредита описаны в приложенных к письму документах. Вы принимаете условия договора?</p>
+<form th:action="${accept_link}" method="POST" style="display: inline;">
+    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; cursor: pointer;">
+        Принять
+    </button>
+</form>
+<form th:action="${reject_link}" method="POST" style="display: inline;">
+    <button type="submit" style="background-color: #f44336; color: white; border: none; padding: 10px 20px; text-align: center; text-decoration: none; font-size: 16px; cursor: pointer;">
+        Отклонить
+    </button>
+</form>
+</body>
+</html>

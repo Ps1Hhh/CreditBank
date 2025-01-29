@@ -67,10 +67,4 @@ public class CreditMapperTest {
         assertEquals(actualCredit, expectedCredit);
 
     }
-
-
-
-
-
-
 }

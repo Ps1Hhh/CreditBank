@@ -11,26 +11,29 @@ import java.util.List;
 public interface IDealService {
 
     /**
-     * Создаёт новую заявку на кредит на основе данных клиента и возвращает список предложений.
+     * Создает заявку на кредит.
      *
-     * @param statementRequest запрос с данными клиента для расчёта предложений кредита.
-     * @return список предложений кредита (от худшего к лучшему).
+     * @param statementRequest запрос на создание заявки.
+     * @return список кредитных предложений.
+     * @throws DefaultException в случае ошибки.
      */
     List<LoanOfferDto> createStatement(LoanStatementRequestDto statementRequest) throws DefaultException;
 
     /**
-     * Обрабатывает выбор кредитного предложения клиентом и обновляет статус заявки.
+     * Выбирает предложение из списка кредитных предложений.
      *
-     * @param appliedOffer выбранное кредитное предложение.
+     * @param appliedOffer выбранное предложение.
      */
     void selectOffer(LoanOfferDto appliedOffer);
 
     /**
-     * Завершает процесс регистрации, отправляет данные для скоринга и создаёт сущность кредита.
+     * Создает кредит на основе завершённой регистрации.
      *
-     * @param finishRequest объект с завершённой регистрацией клиента.
+     * @param finishRequest запрос с данными для завершения регистрации.
      * @param statementId идентификатор заявки.
-     * @throws ScoringDeniedException если скоринг отклонён.
+     * @throws ScoringDeniedException в случае отказа в скоринге.
+     * @throws DefaultException в случае ошибки.
      */
-    void createCredit(FinishRegistrationRequestDto finishRequest, String statementId) throws ScoringDeniedException, DefaultException;
+    void createCredit(FinishRegistrationRequestDto finishRequest, String statementId)
+            throws ScoringDeniedException, DefaultException;
 }

@@ -14,11 +14,8 @@ import java.time.LocalDateTime;
 public class DefaultException extends Exception {
 
     private LocalDateTime timestamp;
-
     private String code;
-
     private String message;
-
     private String details;
 
 }

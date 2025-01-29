@@ -1,4 +1,4 @@
-package creditbank.deal.exception;
+package creditbank.dossier.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,4 +15,5 @@ public class ErrorResponse {
     private String code;
     private String message;
     private String details;
+
 }
