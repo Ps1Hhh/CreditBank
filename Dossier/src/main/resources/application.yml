@@ -11,15 +11,15 @@ spring:
         auth: true
         starttls.enable: true
   kafka:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: dossier-service:9092
   cloud:
     openfeign:
       client:
         config:
           deal:
-            url: http://localhost:8089/deal
+            url: http://deal-service:8081/deal
 server:
-  port: 8091
+  port: 8082
 
 logging:
   level:
