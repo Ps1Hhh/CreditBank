@@ -15,6 +15,7 @@ import creditbank.deal.repository.CreditRepository;
 import creditbank.deal.repository.StatementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,16 @@ public class EmailService implements IEmailService {
     private final KafkaTemplate<String, EmailMessage> emailKafkaTemplate;
     private final KafkaTemplate<String, EmailMessage> fileKafkaTemplate;
 
-    public void sendDocuments(String topic, String statementId, ApplicationStatus status) {
+    @Value("${topics.send-documents}")
+    private String sendDocumentsTopic;
+
+    @Value("${topics.send-ses}")
+    private String sendSesTopic;
+
+    @Value("${topics.credit-issued}")
+    private String creditIssuedTopic;
+
+    public void sendDocuments(String statementId, ApplicationStatus status) {
         Statement statement = statementRepository.getByStatementId(UUID.fromString(statementId));
 
         statement.setStatusAndHistoryEntry(status, ChangeType.AUTOMATIC);
@@ -44,18 +54,28 @@ public class EmailService implements IEmailService {
         List<String> documents = getDocuments(statementId);
         EmailMessage message = EmailMessage.builder()
                 .address(statement.getClient().getEmail())
-                .theme(Theme.getThemeByTopic(topic))
+                .theme(Theme.getThemeByTopic(sendDocumentsTopic))
                 .statementId(statement.getStatementId())
                 .documents(documents)
                 .build();
         log.info("Сформирован текст документов по заявке {}", statementId);
 
-        fileKafkaTemplate.send(topic, message);
+        fileKafkaTemplate.send(sendDocumentsTopic, message);
         log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
-                topic, message.toString());
+                sendDocumentsTopic, message.toString());
     }
 
-    public void sendCode(String topic, String statementId) {
+    public void signDocuments(String statementId, Boolean isAccepted) {
+        if (isAccepted) {
+            sendCode(statementId);
+        } else {
+            log.info("Изменение статуса заявки {} на 'CLIENT_DENIED'", statementId);
+
+            changeStatementStatus(statementId, ApplicationStatus.CLIENT_DENIED, ChangeType.MANUAL);
+        }
+    }
+
+    public void sendCode(String statementId) {
         Statement statement = statementRepository.getByStatementId(UUID.fromString(statementId));
 
         Random rand = new Random();
@@ -68,17 +88,17 @@ public class EmailService implements IEmailService {
 
         EmailMessage message = EmailMessage.builder()
                 .address(statement.getClient().getEmail())
-                .theme(Theme.getThemeByTopic(topic))
+                .theme(Theme.getThemeByTopic(sendSesTopic))
                 .statementId(statement.getStatementId())
                 .code(code)
                 .build();
 
-        emailKafkaTemplate.send(topic, message);
+        emailKafkaTemplate.send(sendSesTopic, message);
         log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
-                topic, message.toString());
+                sendSesTopic, message.toString());
     }
 
-    public void sendCreditIssuedMessage(String topic, String statementId, String code) {
+    public void sendCreditIssuedMessage(String statementId, String code) {
         Statement statement = statementRepository.getByStatementId(UUID.fromString(statementId));
 
         if (statement.getSesCode().equals(code)) {
@@ -98,13 +118,13 @@ public class EmailService implements IEmailService {
 
             EmailMessage message = EmailMessage.builder()
                     .address(statement.getClient().getEmail())
-                    .theme(Theme.getThemeByTopic(topic))
+                    .theme(Theme.getThemeByTopic(creditIssuedTopic))
                     .statementId(statement.getStatementId())
                     .build();
 
-            emailKafkaTemplate.send(topic, message);
+            emailKafkaTemplate.send(creditIssuedTopic, message);
             log.info("Отправлено сообщение в МС-Dossier через Kafka по теме {}: {}",
-                    topic, message.toString());
+                    creditIssuedTopic, message.toString());
         }
     }
 
@@ -128,7 +148,6 @@ public class EmailService implements IEmailService {
     }
 
     private String createLoanContract(Statement statement) {
-
         Client client = statement.getClient();
         Credit credit = statement.getCredit();
 
