@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "deal", configuration = {FeignConfig.class, CustomErrorDecoder.class})
     public interface DealClient {
 
-        @RequestMapping(method = RequestMethod.PUT, value = "/document/{statementId}/status")
+        @RequestMapping(method = RequestMethod.POST, value = "/document/{statementId}/status")
         void changeStatementStatusOnDocumentsCreation(@PathVariable("statementId") String statementId) throws DefaultException;
 
     }

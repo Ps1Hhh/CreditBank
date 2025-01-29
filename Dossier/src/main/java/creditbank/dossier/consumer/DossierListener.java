@@ -1,4 +1,4 @@
-package creditbank.dossier.listener;
+package creditbank.dossier.consumer;
 
 import creditbank.dossier.dto.EmailMessage;
 import creditbank.dossier.exception.DefaultException;
