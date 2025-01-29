@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.info.Info;
  */
 @OpenAPIDefinition(
         info = @Info(
-                title = "Statement API",
+                title = "Gateway API",
                 description = "API для инкапсуляция внутренней логики сервисов приложения.", version = "1.0.0",
                 contact = @Contact(
                         name = "Sergey Esipov",
