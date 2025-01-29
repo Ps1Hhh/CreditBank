@@ -39,4 +39,8 @@ public interface DealClient {
 
     @GetMapping("/admin/statement")
     List<Statement> getAllStatements() throws DefaultException;
+
+    @PostMapping("/document/{statementId}/status")
+    void changeStatementStatusOnDocumentsCreation(@PathVariable("statementId") String statementId) throws DefaultException;
+
 }

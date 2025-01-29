@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -56,5 +54,9 @@ public class GatewayService {
 
     public List<Statement> getAllStatements() throws DefaultException {
         return dealClient.getAllStatements();
+    }
+
+    public void changeStatementStatusOnDocumentsCreation(String statementId) throws DefaultException {
+        dealClient.changeStatementStatusOnDocumentsCreation(statementId);
     }
 }
