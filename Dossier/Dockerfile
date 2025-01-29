@@ -5,13 +5,13 @@ WORKDIR /app
 COPY ./pom.xml ./pom.xml
 COPY ./src ./src
 
-RUN mvn clean install -DskipTests
+RUN mvn clean install
 
 FROM eclipse-temurin:21-jre AS runtime
 
 WORKDIR /app
 
-COPY --from=build /app/target/dataBaseService-0.0.1-SNAPSHOT.jar Dossier.jar
+COPY --from=build /app/target/Dossier-0.0.1-SNAPSHOT.jar Dossier.jar
 
 EXPOSE 8082
 
