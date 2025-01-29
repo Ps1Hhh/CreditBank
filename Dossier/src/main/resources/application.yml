@@ -10,9 +10,6 @@ spring:
       mail.smtp:
         auth: true
         starttls.enable: true
-#        ssl:
-#          protocols: TLSv1.2
-#          trust: smtp.gmail.com
   kafka:
       bootstrap-servers: localhost:9092
   cloud:

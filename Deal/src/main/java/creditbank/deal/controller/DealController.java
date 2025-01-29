@@ -78,6 +78,13 @@ public class DealController implements Deal {
         emailService.signDocuments(statementId, isAccepted);
     }
 
+    @PostMapping("/document/{statementId}/status")
+    public void changeStatusOnDocumentsCreated(@PathVariable String statementId) {
+        log.debug("Изменение статуса заявки {} на 'DOCUMENTS_CREATED'", statementId);
+
+        emailService.changeStatementStatus(statementId, ApplicationStatus.DOCUMENTS_CREATED, ChangeType.AUTOMATIC);
+    }
+
     @PostMapping("/document/{statementId}/code")
     public void sendCodeVerification(@RequestParam("code") String code, @PathVariable String statementId) {
         log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
