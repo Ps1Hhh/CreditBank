@@ -42,7 +42,9 @@ services:
       - app-network
 
   calculator-service:
-    build: ./Calculator
+    build:
+      context: ./
+      dockerfile: ./Calculator/Dockerfile
     image: calculator-service
     container_name: calculator-service
     ports:
@@ -57,7 +59,9 @@ services:
       - app-network
 
   deal-service:
-    build: ./Deal
+    build:
+      context: ./
+      dockerfile: ./Deal/Dockerfile
     image: deal-service
     container_name: deal-service
     ports:
@@ -72,8 +76,10 @@ services:
       - app-network
 
   dossier-service:
-    build: ./Dossier
-    image: dossier
+    build:
+      context: ./
+      dockerfile: ./Dossier/Dockerfile
+    image: dossier-service
     container_name: dossier-service
     ports:
       - "8082:8082"
@@ -87,8 +93,10 @@ services:
       - app-network
 
   gateway-service:
-    build: ./Gateway
-    image: gateway
+    build:
+      context: ./
+      dockerfile: ./Gateway/Dockerfile
+    image: gateway-service
     container_name: gateway-service
     ports:
       - "8083:8083"
@@ -102,8 +110,10 @@ services:
       - app-network
 
   statement-service:
-    build: ./Statement
-    image: statement
+    build:
+      context: ./
+      dockerfile: ./Statement/Dockerfile
+    image: statement-service
     container_name: statement-service
     ports:
       - "8084:8084"

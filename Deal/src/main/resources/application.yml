@@ -19,7 +19,7 @@ spring:
           calculator:
             url: http://calculator-service:8080/calculator
   kafka:
-    bootstrap-servers: deal-service:9092
+    bootstrap-servers: broker:9092
 server:
   port: 8081
 logging:

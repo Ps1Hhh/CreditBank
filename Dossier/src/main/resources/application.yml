@@ -11,7 +11,7 @@ spring:
         auth: true
         starttls.enable: true
   kafka:
-      bootstrap-servers: dossier-service:9092
+      bootstrap-servers: broker:9092
   cloud:
     openfeign:
       client:
