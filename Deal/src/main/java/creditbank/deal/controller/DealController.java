@@ -39,15 +39,6 @@ public class DealController implements Deal {
     private final EmailService emailService;
     private final AdminService adminService;
 
-    @Value("${topics.send-documents}")
-    private String sendDocumentsTopic;
-
-    @Value("${topics.send-ses}")
-    private String sendSesTopic;
-
-    @Value("${topics.credit-issued}")
-    private String creditIssuedTopic;
-
     @PostMapping("/statement")
     public List<LoanOfferDto> createLoanOffers(@RequestBody LoanStatementRequestDto statementRequest)
             throws DefaultException {
@@ -57,8 +48,6 @@ public class DealController implements Deal {
 
         log.info("Ответ после обработки кредитной заявки: {}", result.toString());
         return result;
-
-
     }
 
     @PostMapping("/offer/select")
@@ -81,7 +70,7 @@ public class DealController implements Deal {
     public void sendDocuments(@PathVariable String statementId) {
         log.info("Запрос на формирование и отправку документов по заявке {}", statementId);
 
-        emailService.sendDocuments(sendDocumentsTopic, statementId, ApplicationStatus.PREPARE_DOCUMENTS);
+        emailService.sendDocuments(statementId, ApplicationStatus.PREPARE_DOCUMENTS);
     }
 
     @PostMapping("/document/{statementId}/sign")
@@ -89,22 +78,21 @@ public class DealController implements Deal {
                               @PathVariable String statementId) {
         log.info("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
 
-        if (isAccepted) {
-            emailService.sendCode(sendSesTopic, statementId);
-        } else {
-            log.info("Изменение статуса заявки {} на 'CLIENT_DENIED'", statementId);
+        emailService.signDocuments(statementId, isAccepted);
+    }
 
-            emailService.changeStatementStatus(
-                    statementId,
-                    ApplicationStatus.CLIENT_DENIED, ChangeType.MANUAL);
-        }
+    @PostMapping("/document/{statementId}/status")
+    public void changeStatusOnDocumentsCreated(@PathVariable String statementId) {
+        log.debug("Изменение статуса заявки {} на 'DOCUMENTS_CREATED'", statementId);
+
+        emailService.changeStatementStatus(statementId, ApplicationStatus.DOCUMENTS_CREATED, ChangeType.AUTOMATIC);
     }
 
     @PostMapping("/document/{statementId}/code")
     public void sendCodeVerification(@RequestParam("code") String code, @PathVariable String statementId) {
         log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
 
-        emailService.sendCreditIssuedMessage(creditIssuedTopic, statementId, code);
+        emailService.sendCreditIssuedMessage(statementId, code);
     }
 
     @GetMapping("/admin/statement/{statementId}")
