@@ -105,8 +105,6 @@ public class EmailService {
         for(int i = 0; i < message.getDocuments().size(); i++) {
             File file = new File(documentPath + "attach" + (i + 1) + "_" + statementId + ".txt");
 
-            System.out.println(documentPath);
-
             FileWriter writer = new FileWriter(file);
             writer.write(message.getDocuments().get(i));
             writer.flush();
