@@ -8,6 +8,8 @@ import creditbank.deal.dto.enums.ChangeType;
 import creditbank.deal.exception.DefaultException;
 import creditbank.deal.exception.ScoringDeniedException;
 import creditbank.deal.interfaces.Deal;
+import creditbank.deal.model.entity.Statement;
+import creditbank.deal.service.AdminService;
 import creditbank.deal.service.DealService;
 import creditbank.deal.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class DealController implements Deal {
 
     private final DealService dealService;
     private final EmailService emailService;
+    private final AdminService adminService;
 
     @PostMapping("/statement")
     public List<LoanOfferDto> createLoanOffers(@RequestBody LoanStatementRequestDto statementRequest)
@@ -90,5 +93,19 @@ public class DealController implements Deal {
         log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
 
         emailService.sendCreditIssuedMessage(statementId, code);
+    }
+
+    @GetMapping("/admin/statement/{statementId}")
+    public Statement getStatementById(@PathVariable String statementId) {
+        log.info("Запрос администратора на получение заявки {}", statementId);
+
+        return adminService.getStatementById(statementId);
+    }
+
+    @GetMapping("/admin/statement")
+    public List<Statement> getAllStatements() {
+        log.info("Запрос администратора на получение всех заявок");
+
+        return adminService.getAllStatements();
     }
 }

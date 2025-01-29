@@ -13,8 +13,6 @@ spring:
     default-property-inclusion: non_null
 server:
   port: 8090
-  servlet:
-    context-path: /StatementAPI
 
 logging:
   level:
