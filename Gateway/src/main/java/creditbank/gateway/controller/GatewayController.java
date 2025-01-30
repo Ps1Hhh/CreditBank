@@ -4,7 +4,7 @@ package creditbank.gateway.controller;
 import creditbank.gateway.dto.FinishRegistrationRequestDto;
 import creditbank.gateway.dto.LoanOfferDto;
 import creditbank.gateway.dto.LoanStatementRequestDto;
-import creditbank.gateway.dto.entity.Statement;
+import creditbank.gateway.dto.StatementDto;
 import creditbank.gateway.exception.DefaultException;
 import creditbank.gateway.interfaces.Gateway;
 import creditbank.gateway.service.GatewayService;
@@ -88,14 +88,14 @@ public class GatewayController implements Gateway {
     }
 
     @GetMapping("/admin/statement/{statementId}")
-    public Statement getStatementById(@PathVariable String statementId) throws DefaultException {
+    public StatementDto getStatementById(@PathVariable String statementId) throws DefaultException {
         log.info("Запрос администратора на получение заявки {}", statementId);
 
         return gatewayService.getStatementById(statementId);
     }
 
     @GetMapping("/admin/statement")
-    public List<Statement> getAllStatements() throws DefaultException {
+    public List<StatementDto> getAllStatements() throws DefaultException {
         log.info("Запрос администратора на получение всех заявок");
 
         return gatewayService.getAllStatements();
