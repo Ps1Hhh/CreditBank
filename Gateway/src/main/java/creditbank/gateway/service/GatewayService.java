@@ -3,7 +3,7 @@ package creditbank.gateway.service;
 import creditbank.gateway.dto.FinishRegistrationRequestDto;
 import creditbank.gateway.dto.LoanOfferDto;
 import creditbank.gateway.dto.LoanStatementRequestDto;
-import creditbank.gateway.dto.entity.Statement;
+import creditbank.gateway.dto.StatementDto;
 import creditbank.gateway.exception.DefaultException;
 import creditbank.gateway.interfaces.DealClient;
 import creditbank.gateway.interfaces.StatementClient;
@@ -48,11 +48,11 @@ public class GatewayService {
         dealClient.sendCodeVerification(code, statementId);
     }
 
-    public Statement getStatementById(String statementId) throws DefaultException {
+    public StatementDto getStatementById(String statementId) throws DefaultException {
         return dealClient.getStatementById(statementId);
     }
 
-    public List<Statement> getAllStatements() throws DefaultException {
+    public List<StatementDto> getAllStatements() throws DefaultException {
         return dealClient.getAllStatements();
     }
 

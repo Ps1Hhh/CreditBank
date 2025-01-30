@@ -3,7 +3,7 @@ package creditbank.gateway.interfaces;
 
 import creditbank.gateway.config.FeignConfig;
 import creditbank.gateway.dto.FinishRegistrationRequestDto;
-import creditbank.gateway.dto.entity.Statement;
+import creditbank.gateway.dto.StatementDto;
 import creditbank.gateway.exception.CustomErrorDecoder;
 import creditbank.gateway.exception.DefaultException;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -35,10 +35,10 @@ public interface DealClient {
             throws DefaultException;
 
     @GetMapping("/admin/statement/{statementId}")
-    Statement getStatementById(@PathVariable String statementId) throws DefaultException;
+    StatementDto getStatementById(@PathVariable String statementId) throws DefaultException;
 
     @GetMapping("/admin/statement")
-    List<Statement> getAllStatements() throws DefaultException;
+    List<StatementDto> getAllStatements() throws DefaultException;
 
     @PostMapping("/document/{statementId}/status")
     void changeStatementStatusOnDocumentsCreation(@PathVariable("statementId") String statementId) throws DefaultException;
