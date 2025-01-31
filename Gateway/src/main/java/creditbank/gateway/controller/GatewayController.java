@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//@Tag(name = "Шлюз", description = "Инкапсулирует логику микросервисов приложения.")
+@Tag(name = "Шлюз", description = "Инкапсулирует логику микросервисов приложения.")
 public class GatewayController implements Gateway {
 
     private final GatewayService gatewayService;
@@ -50,7 +50,7 @@ public class GatewayController implements Gateway {
 
     @PostMapping("/statement/registration/{statementId}")
     public void finishRegistration(FinishRegistrationRequestDto finishRequest,
-                                   @PathVariable String statementId) throws DefaultException {
+                                   @PathVariable("statementId") String statementId) throws DefaultException {
         log.info("Запрос на расчёт кредитного предложения по заявке {}: {}",
                 statementId, finishRequest.toString());
 
@@ -58,7 +58,7 @@ public class GatewayController implements Gateway {
     }
 
     @PostMapping("/document/{statementId}")
-    public void sendDocuments(@PathVariable String statementId) throws DefaultException {
+    public void sendDocuments(@PathVariable("statementId") String statementId) throws DefaultException {
         log.info("Запрос на формирование и отправку документов по заявке {}", statementId);
 
         gatewayService.sendDocuments(statementId);
@@ -66,14 +66,14 @@ public class GatewayController implements Gateway {
 
     @PostMapping("/document/{statementId}/sign")
     public void signDocuments(@RequestParam("decision") Boolean isAccepted,
-                              @PathVariable String statementId) throws DefaultException {
+                              @PathVariable("statementId") String statementId) throws DefaultException {
         log.info("Запрос на подписание документов по заявке {}. Принято: {}", statementId, isAccepted);
 
         gatewayService.signDocuments(isAccepted, statementId);
     }
 
     @PostMapping("/document/{statementId}/status")
-    public void changeStatusOnDocumentsCreated(@PathVariable String statementId) throws DefaultException {
+    public void changeStatusOnDocumentsCreated(@PathVariable("statementId") String statementId) throws DefaultException {
         log.debug("Изменение статуса заявки {} на 'DOCUMENTS_CREATED'", statementId);
 
         gatewayService.changeStatementStatusOnDocumentsCreation(statementId);
@@ -81,14 +81,14 @@ public class GatewayController implements Gateway {
 
     @PostMapping("/document/{statementId}/sign/code")
     public void sendCodeVerification(@RequestParam("code") String code,
-                                     @PathVariable String statementId) throws DefaultException {
+                                     @PathVariable("statementId") String statementId) throws DefaultException {
         log.info("Запрос на подтверждение кода для подписания документов по заявке {}. Полученный код: {}", statementId, code);
 
         gatewayService.sendCodeVerification(code, statementId);
     }
 
     @GetMapping("/admin/statement/{statementId}")
-    public StatementDto getStatementById(@PathVariable String statementId) throws DefaultException {
+    public StatementDto getStatementById(@PathVariable("statementId") String statementId) throws DefaultException {
         log.info("Запрос администратора на получение заявки {}", statementId);
 
         return gatewayService.getStatementById(statementId);

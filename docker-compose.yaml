@@ -47,12 +47,18 @@ services:
 
   calculator-service:
     build:
-      context: .
-      dockerfile: Calculator/Dockerfile
+      context: ./
+      dockerfile: ./Calculator/Dockerfile
+      args:
+        REBUILD: always
     image: calculator-service
     container_name: calculator-service
     ports:
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
@@ -62,6 +68,8 @@ services:
     build:
       context: ./
       dockerfile: ./Deal/Dockerfile
+      args:
+        REBUILD: always
     image: deal-service
     container_name: deal-service
     ports:
@@ -70,7 +78,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: pass
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: broker:9092
+      BROKER_HOST: ${BROKER_HOST}
     depends_on:
       - postgres
       - kafka
@@ -81,11 +89,16 @@ services:
     build:
       context: ./
       dockerfile: ./Dossier/Dockerfile
+      args:
+        REBUILD: always
     image: dossier-service
     container_name: dossier-service
     ports:
       - "8082:8082"
     environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
       BROKER_HOST: ${BROKER_HOST}
       MY_EMAIL: ${MY_EMAIL}
       MY_PASSWORD: ${MY_PASSWORD}
@@ -99,10 +112,16 @@ services:
     build:
       context: ./
       dockerfile: ./Gateway/Dockerfile
+      args:
+        REBUILD: always
     image: gateway-service
     container_name: gateway-service
     ports:
       - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
@@ -112,10 +131,16 @@ services:
     build:
       context: ./
       dockerfile: ./Statement/Dockerfile
+      args:
+        REBUILD: always
     image: statement-service
     container_name: statement-service
     ports:
       - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
