@@ -11,40 +11,91 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test-coverage:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
-        run: docker build -t my-app .
+      - name: Start services with docker-compose
+        run: docker-compose up -d --build --no-cache
 
-      - name: Run tests with coverage
-        run: |
-          docker run --rm my-app pytest --cov=src --cov-report=xml
-
-      - name: Upload coverage to Codecov
+      - name: Run tests in calculator-service
+        run: docker-compose exec -T calculator-service pytest --cov=src --cov-report=xml
+      - name: Upload coverage for calculator-service
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
+          files: ./calculator-service/coverage.xml
+          flags: calculator-service
 
-      - name: Run SonarCloud analysis
-        uses: sonarsource/sonarcloud-github-action@master
+      - name: Run tests in deal-service
+        run: docker-compose exec -T deal-service pytest --cov=src --cov-report=xml
+      - name: Upload coverage for deal-service
+        uses: codecov/codecov-action@v4
         with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.organization=my-org
-            -Dsonar.projectKey=my-project
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./deal-service/coverage.xml
+          flags: deal-service
+
+      - name: Run tests in statement-service
+        run: docker-compose exec -T statement-service pytest --cov=src --cov-report=xml
+      - name: Upload coverage for statement-service
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./statement-service/coverage.xml
+          flags: statement-service
+
+      - name: Stop services
+        run: docker-compose down
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 23 (SonarScanner requires Java)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarScanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/.sonar/scanner
+          curl -Ls https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip -o sonar-scanner.zip
+          unzip sonar-scanner.zip -d ~/.sonar/scanner
+          rm sonar-scanner.zip
+
+      - name: Run SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ~/.sonar/scanner/sonar-scanner-*/bin/sonar-scanner \
+            -Dsonar.organization=Ps1Hhh \
+            -Dsonar.projectKey=CreditBank \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.python.coverage.reportPaths=calculator-service/coverage.xml,deal-service/coverage.xml,statement-service/coverage.xml,gateway-service/coverage.xml,dossier-service/coverage.xml
