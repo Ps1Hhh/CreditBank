@@ -10,7 +10,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - app-network
+      - CreditBank-network
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -29,7 +29,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
-      - app-network
+      - CreditBank-network
 
   postgres:
     image: postgres:15
@@ -43,24 +43,20 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - app-network
+      - CreditBank-network
 
   calculator-service:
     build:
-      context: ./
-      dockerfile: ./Calculator/Dockerfile
+      context: .
+      dockerfile: Calculator/Dockerfile
     image: calculator-service
     container_name: calculator-service
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
-      - app-network
+      - CreditBank-network
 
   deal-service:
     build:
@@ -79,7 +75,7 @@ services:
       - postgres
       - kafka
     networks:
-      - app-network
+      - CreditBank-network
 
   dossier-service:
     build:
@@ -90,9 +86,6 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: pass
       BROKER_HOST: ${BROKER_HOST}
       MY_EMAIL: ${MY_EMAIL}
       MY_PASSWORD: ${MY_PASSWORD}
@@ -100,7 +93,7 @@ services:
       - postgres
       - kafka
     networks:
-      - app-network
+      - CreditBank-network
 
   gateway-service:
     build:
@@ -110,14 +103,10 @@ services:
     container_name: gateway-service
     ports:
       - "8083:8083"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
-      - app-network
+      - CreditBank-network
 
   statement-service:
     build:
@@ -127,16 +116,12 @@ services:
     container_name: statement-service
     ports:
       - "8084:8084"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: pass
     depends_on:
       - postgres
     networks:
-      - app-network
+      - CreditBank-network
 volumes:
   postgres-data:
 
 networks:
-  app-network:
+  CreditBank-network:
