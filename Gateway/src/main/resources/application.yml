@@ -4,13 +4,14 @@ spring:
   cloud:
     openfeign:
       client:
+        default-to-properties: true
         config:
           deal:
-            url: http://localhost:8089/deal
+            url: http://deal-service:8081/deal
           statement:
-            url: http://localhost:8090/statement
+            url: http://statement-service:8084/statement
 server:
-  port: 8087
+  port: 8083
 
 logging:
   level:

@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Шлюз", description = "Инкапсулирует логику микросервисов приложения.")
+//@Tag(name = "Шлюз", description = "Инкапсулирует логику микросервисов приложения.")
 public class GatewayController implements Gateway {
 
     private final GatewayService gatewayService;
