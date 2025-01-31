@@ -9,6 +9,8 @@ services:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -22,7 +24,119 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: calculator_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  calculator-service:
+    build:
+      context: ./
+      dockerfile: ./Calculator/Dockerfile
+    image: calculator-service
+    container_name: calculator-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  deal-service:
+    build:
+      context: ./
+      dockerfile: ./Deal/Dockerfile
+    image: deal-service
+    container_name: deal-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: broker:9092
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - app-network
+
+  dossier-service:
+    build:
+      context: ./
+      dockerfile: ./Dossier/Dockerfile
+    image: dossier-service
+    container_name: dossier-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
+      BROKER_HOST: ${BROKER_HOST}
+      MY_EMAIL: ${MY_EMAIL}
+      MY_PASSWORD: ${MY_PASSWORD}
+    depends_on:
+      - postgres
+      - kafka
+    networks:
+      - app-network
+
+  gateway-service:
+    build:
+      context: ./
+      dockerfile: ./Gateway/Dockerfile
+    image: gateway-service
+    container_name: gateway-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  statement-service:
+    build:
+      context: ./
+      dockerfile: ./Statement/Dockerfile
+    image: statement-service
+    container_name: statement-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: pass
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
