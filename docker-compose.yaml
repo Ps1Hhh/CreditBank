@@ -59,6 +59,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: pass
+    command: pytest --cov=src --cov-report=xml --cov-report=term
     depends_on:
       - postgres
     networks:
@@ -79,6 +80,7 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: pass
       BROKER_HOST: ${BROKER_HOST}
+    command: pytest --cov=src --cov-report=xml --cov-report=term
     depends_on:
       - postgres
       - kafka
@@ -141,6 +143,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: pass
+    command: pytest --cov=src --cov-report=xml --cov-report=term
     depends_on:
       - postgres
     networks:
