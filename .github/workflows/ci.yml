@@ -34,6 +34,9 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: SonarCloud
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Ps1Hhh_CreditBank
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.organization=Ps1Hhh \
+            -Dsonar.projectKey=Ps1Hhh_CreditBank
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
