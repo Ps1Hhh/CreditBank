@@ -2,7 +2,7 @@ spring:
   application:
     name: Deal
   datasource:
-    url: jdbc:postgresql://postgres:5432/calculator_db
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/calculator_db
     username: admin
     password: pass
     driverClassName: org.postgresql.Driver
@@ -17,7 +17,7 @@ spring:
       client:
         config:
           calculator:
-            url: http://calculator-service:8080/calculator
+            url: http://${CALCULATOR_HOST:localhost}:8080/calculator
   kafka:
     bootstrap-servers: ${BROKER_HOST:localhost}:9092
 server:

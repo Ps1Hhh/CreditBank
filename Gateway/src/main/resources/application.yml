@@ -7,9 +7,9 @@ spring:
         default-to-properties: true
         config:
           deal:
-            url: http://deal-service:8081/deal
+            url: http://${DEAL_HOST:localhost}:8081/deal
           statement:
-            url: http://statement-service:8084/statement
+            url: http://${STATEMENT_HOST:localhost}:8084/statement
 server:
   port: 8083
 

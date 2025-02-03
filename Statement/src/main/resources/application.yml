@@ -6,7 +6,7 @@ spring:
       client:
         config:
           deal:
-            url: http://deal-service:8081/deal
+            url: http://${DEAL_HOST:localhost}:8081/deal
   jackson:
     serialization:
       fail-on-empty-beans: false
