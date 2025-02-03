@@ -36,7 +36,7 @@ public class KafkaConsumerConfig {
 
         // Конфигурация JsonDeserializer
         JsonDeserializer<EmailMessage> jsonDeserializer = new JsonDeserializer<>(EmailMessage.class);
-        jsonDeserializer.addTrustedPackages("*"); // Убедитесь, что пакет вашего объекта доверен
+        jsonDeserializer.addTrustedPackages("*");
         jsonDeserializer.setRemoveTypeHeaders(false);
         jsonDeserializer.setUseTypeMapperForKey(true);
 

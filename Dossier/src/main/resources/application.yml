@@ -4,22 +4,22 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: YouMail
-    password: Pass
+    username: ${MY_EMAIL}
+    password: ${MY_PASSWORD}
     properties:
       mail.smtp:
         auth: true
         starttls.enable: true
   kafka:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: ${BROKER_HOST:localhost}:9092
   cloud:
     openfeign:
       client:
         config:
           deal:
-            url: http://localhost:8089/deal
+            url: http://${DEAL_HOST:localhost}:8081/deal
 server:
-  port: 8091
+  port: 8082
 
 logging:
   level:

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-@FeignClient(value = "statement", configuration = {FeignConfig.class, CustomErrorDecoder.class})
+@FeignClient(name = "statement", url = "${spring.cloud.openfeign.client.config.statement.url}",
+        configuration = {FeignConfig.class, CustomErrorDecoder.class})
 public interface StatementClient {
 
     @PostMapping("")
